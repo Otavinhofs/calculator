@@ -19,22 +19,21 @@ class ViewController: UIViewController {
     
     @IBAction func equalTap(_ sender: UIButton) {
 
-        let expression = NSExpression(format: workings)
+      let expression = NSExpression(format: workings)
         let result = expression.expressionValue(with: nil, context: nil) as! Double
         let stringResult = formatResult(result: result)
         resultLabel.text = stringResult
+        print(result)
+        
     }
     
     func formatResult(result: Double) -> String {
-        if result.truncatingRemainder(dividingBy: 2) == 0 {
-            return String(format: "%.0f", result)
-        }else {
-            return String(format: "%.2f", result)
-        }
+        
+        return String(format: "%.2f", result)
     }
     
     func addToWorkings(value: String) {
-        workings = workings + value
+        workings += value
         numberView.text = workings
     }
     
