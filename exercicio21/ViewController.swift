@@ -8,114 +8,95 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var workings = ""
-    @IBOutlet weak var numberView: UILabel!
-    @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var expressionLabel: UILabel!
     
+    var operatorSignal = 0
+    var calcValue: Double = 0
+    var calcValue2: Double = 0
+    var performingMath = false
     override func viewDidLoad() {
         super.viewDidLoad()
-           clearAll()
+        clearAll()
     }
     
-    @IBAction func equalTap(_ sender: UIButton) {
-
-      let expression = NSExpression(format: workings)
-        let result = expression.expressionValue(with: nil, context: nil) as! Double
-        let stringResult = formatResult(result: result)
-        resultLabel.text = stringResult
-        print(result)
-        
-    }
-    
-    func formatResult(result: Double) -> String {
-        
-        return String(format: "%.2f", result)
-    }
-    
-    func addToWorkings(value: String) {
-        workings += value
-        numberView.text = workings
-    }
-    
-    func clearAll() {
-        numberView.text = "0"
-        resultLabel.text = ""
-        workings = ""
-    }
-    
-    @IBAction func backTap(_ sender: UIButton) {
-        if !workings.isEmpty {
-            workings.removeLast()
-            numberView.text = workings
+    @IBAction func numbers(_ sender: UIButton) {
+        if performingMath == true {
+            expressionLabel.text = String(sender.tag)
+            calcValue = Double(expressionLabel.text!) ?? 0
+            performingMath = false
+            
+        }else{
+            expressionLabel.text = expressionLabel.text! + String(sender.tag)
+            calcValue = Double(expressionLabel.text!) ?? 0
+            
         }
     }
     
     
-    @IBAction func divisionTap(_ sender: UIButton) {
-        addToWorkings(value: "/")
+    @IBAction func expressionsFunc(_ sender: UIButton) {
+        if expressionLabel.text != "" {
+            calcValue2 = Double(expressionLabel.text!) ?? 0
+            if sender.tag == 11 {
+                expressionLabel.text = "ˆ"
+            }
+            if sender.tag == 12 {
+                expressionLabel.text = "%"
+            }
+            if sender.tag == 13 {
+                expressionLabel.text = "/"
+            }
+            if sender.tag == 14 {
+                expressionLabel.text = "x"
+            }
+            if sender.tag == 15 {
+                expressionLabel.text = "-"
+            }
+            if sender.tag == 16 {
+                expressionLabel.text = "+"
+            }
+            operatorSignal = sender.tag
+            performingMath = true
+        }
     }
     
-    @IBAction func percentTap(_ sender: UIButton) {
-        addToWorkings(value: "%")
+    @IBAction func resultBotton(_ sender: UIButton) {
+        if operatorSignal == 11 {
+            expressionLabel.text = String(pow(calcValue2, calcValue))
+        }
+        if operatorSignal == 12 {
+            expressionLabel.text = String((calcValue2 * calcValue) / 100)
+        }
+        if operatorSignal == 13 {
+            expressionLabel.text = String(calcValue2 / calcValue)
+        }
+        if operatorSignal == 14 {
+            expressionLabel.text = String(calcValue2 * calcValue)
+        }
+        if operatorSignal == 15 {
+            expressionLabel.text = String(calcValue2 - calcValue)
+        }
+        if operatorSignal == 16 {
+            expressionLabel.text = String(calcValue2 + calcValue)
+        }
     }
-    @IBAction func multiplicationTap(_ sender: UIButton) {
-        addToWorkings(value: "*")
-    }
-    
-    @IBAction func subtractionTap(_ sender: UIButton) {
-        addToWorkings(value: "-")
-    }
-    
-    @IBAction func plusTap(_ sender: UIButton) {
-        addToWorkings(value: "+")
-    }
-    
-    @IBAction func zeroTap(_ sender: UIButton) {
-        addToWorkings(value: "0")
-    }
-    
-    @IBAction func oneTap(_ sender: UIButton) {
-        addToWorkings(value: "1")
-    }
-    
-    @IBAction func twoTap(_ sender: UIButton) {
-        addToWorkings(value: "2")
-    }
-    
-    @IBAction func threeTap(_ sender: UIButton) {
-        addToWorkings(value: "3")
-    }
-    
-    @IBAction func fourTap(_ sender: UIButton) {
-        addToWorkings(value: "4")
-    }
-    
-    @IBAction func fiveTap(_ sender: UIButton) {
-        addToWorkings(value: "5")
-    }
-    
-    @IBAction func sixTap(_ sender: UIButton) {
-        addToWorkings(value: "6")
-    }
-    
-    @IBAction func sevenTap(_ sender: UIButton) {
-        addToWorkings(value: "7")
-    }
-    
-    @IBAction func eightTap(_ sender: UIButton) {
-        addToWorkings(value: "8")
-    }
-    
-    @IBAction func nineTap(_ sender: UIButton) {
-        addToWorkings(value: "9")
-    }
-    @IBAction func allClearTap(_ sender: UIButton) {
+    @IBAction func acFunc(_ sender: UIButton) {
         clearAll()
-        
-    }
-    @IBAction func pointTap(_ sender: UIButton) {
-        addToWorkings(value: ".")
     }
     
+    @IBAction func pointTap(_ sender: UIButton) {
+        if expressionLabel.text!.isEmpty {
+            expressionLabel.text = "0."
+        }else {
+            if !expressionLabel.text!.contains(".") {
+                expressionLabel.text! +=  "."
+                
+            }
+        }
+        calcValue = Double(expressionLabel.text!) ?? 0
+    }
+    func clearAll() {
+        expressionLabel.text = ""
+        calcValue = 0
+        calcValue2 = 0
+    }
 }
-
